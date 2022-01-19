@@ -1,0 +1,62 @@
+#include <LiquidCrystal.h>
+#include <Servo.h>
+
+
+Servo myservo;
+
+
+
+int angle = 0;
+
+
+LiquidCrystal lcd(12, 11, 5, 4, 3, 2);
+long duration;
+int distance;
+
+void setup() {
+  pinMode(9, OUTPUT); // Sets the trigPin as an Output
+pinMode(10, INPUT); // Sets the echoPin as an Input
+Serial.begin(9600); // Starts the serial communication
+  lcd.begin(16, 2);
+ myservo.attach(8);
+}
+
+void loop() {
+  
+  
+  
+  digitalWrite(9, LOW);
+delay(1000);
+
+digitalWrite(9, HIGH);
+delayMicroseconds(10);
+digitalWrite(9, LOW);
+
+duration = pulseIn(10, HIGH);
+
+distance= duration*0.034/2;
+
+Serial.print("Distance: ");
+Serial.println(distance);
+  myservo.write(0);
+  
+  {
+    if (distance<100)
+    { lcd.setCursor(0, 0);
+  lcd.print("SANITIZE");
+  lcd.setCursor(0, 1);
+    myservo.write(90);
+  delay(3000);
+     myservo.write(0);
+      lcd.clear();
+
+    }
+       else
+     {
+        lcd.setCursor(0, 0);
+  lcd.print("MASK  UP");
+     delay(3000); 
+          lcd.clear();
+     }
+  }
+}
